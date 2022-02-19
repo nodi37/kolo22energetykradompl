@@ -1,0 +1,44 @@
+{
+  "name": "statertemplate",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "watch:sass": "node-sass SASS/main.scss public/css/style.min.css -w",
+    "live-server": "live-server",
+    "start": "npm-run-all --parallel watch:sass live-server",
+    "remove:css": "del-cli --force public/css/style.min.css",
+    "compile:sass": "node-sass SASS/main.scss public/css/compiled.style-ty-jonas-schmedtmann.css",
+    "prefix:css": "postcss --use autoprefixer -b 'last 10 versions' public/css/compiled.style-ty-jonas-schmedtmann.css -o public/css/prefixes.style-ty-jonas-schmedtmann.css",
+    "compress:css": "node-sass public/css/compiled.style-ty-jonas-schmedtmann.css public/css/style.min.css --output-style compressed",
+    "clean:css": "del-cli --force public/css/*.style-ty-jonas-schmedtmann.css",
+    "build:css": "npm-run-all remove:css compile:sass prefix:css compress:css clean:css"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "autoprefixer": "^10.4.0",
+    "concat": "^1.0.3",
+    "del-cli": "^4.0.1",
+    "node-sass": "^7.0.0",
+    "npm-run-all": "^4.1.5",
+    "postcss": "^8.4.5",
+    "postcss-cli": "^9.1.0"
+  },
+  "dependencies": {
+    "ajv": "^8.9.0",
+    "axios": "^0.25.0",
+    "bcrypt": "^5.0.1",
+    "body-parser": "^1.19.1",
+    "cookie-parser": "^1.4.6",
+    "dotenv": "^14.3.2",
+    "ejs": "^3.1.6",
+    "express": "^4.17.2",
+    "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.21",
+    "mongoose": "^6.1.8",
+    "multer": "^1.4.4",
+    "path": "^0.12.7",
+    "sharp": "^0.30.0"
+  }
+}

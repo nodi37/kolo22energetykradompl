@@ -1,0 +1,38 @@
+<% currentDir = `/img/gallery/${data._id}/` %>
+<script>
+        $(document).ready(()=>{
+            $('.gallery-view__image-miniature').on('click', loadFullView);
+            imageList = [<% data.imageList.forEach(image=>{ %>
+                "<%= image %>",
+            <% }); %>];
+            currentDir = "<%=currentDir%>";
+        });
+</script>
+<div class="full-view">
+    <div class="full-view__arrow full-view__arrow--previous">&laquo;</div>
+    <div class="full-view__img-container">
+        <figure class="full-view__figure">
+            <span class="full-view__close">&times;</span>
+        </figure>
+    </div>
+    <div class="full-view__arrow full-view__arrow--next">&raquo;</div>
+</div>
+<div class='central-container'>
+    <div class="post-view">
+        <h1 class="post-view__title"><%=data.pName%></h1>
+        <% if (data.pDscLong) { %>
+            <div class="post-view__description"><%-data.pDscLongHtml%></div>
+        <% } %>
+        <div class="gallery-view">
+            <div class="gallery-view__image-selector">
+                <% data.imageList.forEach(image=>{ %>
+                    <% const ext = image.slice(image.lastIndexOf('.')); %>
+                    <% const fName = image.replace(ext, '-mini' + ext); %>
+                    <div class="gallery-view__image-container">
+                        <img data-original-image="<%=image%>" src="<%=currentDir%>/<%=fName%>" alt="Zdjęcie z galerii." class="gallery-view__image-miniature"></img>
+                    </div>
+                <% }) %>
+            </div>
+        </div>
+    </div>
+</div>

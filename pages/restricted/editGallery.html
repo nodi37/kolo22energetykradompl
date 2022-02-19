@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang='pl'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <link rel='stylesheet' href='/css/style.min.css'>
+    <title>Admin Page - Strona Koła</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/favicon/site.webmanifest">
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js'></script>
+    <script src='/scripts/admin/preloaders.js'></script>
+    <script src='/scripts/admin/buttonhandlers.js'></script>
+    <script src='/scripts/admin/requests.js'></script>
+    <script src='/scripts/admin/otherFunctions.js'></script>
+    <script src='/scripts/admin/appendFunctions.js'></script>
+    <script>
+        $('document').ready(editPagePreLoader);
+    </script>
+</head>
+<body class='body-admin'>
+    <header class='header'>
+        <div class='logo'>
+            <a href="/" class="logo__link">
+                <div class='logo__text--only'>Koło nr 22 Energetyk Radom</div>
+            </a>
+        </div>
+        <div class="logout">
+            <form action='/logout' method='get'>
+                <button type="submit" class="btn btn-red logout__btn">Wyloguj</button>
+            </form>
+        </div>
+    </header>
+    <div class='container-admin'>
+        <div class='sidebar-admin'>
+            <ul class='side-nav'>
+                <li class='side-nav__item'><a href='/admin/opisy' class='side-nav__link'>Opisy</a></li>
+                <li class='side-nav__item side-nav__item-active'><a href='/admin/galerie'
+                        class='side-nav__link'>Galerie</a></li>
+                <li class='side-nav__item'><a href='/admin/zawody' class='side-nav__link'>Zawody</a></li>
+                <li class='side-nav__item'><a href='/admin/wedkarzroku' class='side-nav__link'>Wędkarz roku</a></li>
+            </ul>
+        </div>
+        <main class='main-admin'>
+            <div class='post'>
+                <label class='post__label' for='post__name'>Nazwa wpisu:</label>
+                <textarea name='post__name' id='post__name'></textarea>
+                <label class='post__label' for='post__description'>Opis na karcie:</label>
+                <textarea name='post__description' id='post__description'></textarea>
+                <label class='post__label' for='post__all'>Opis cały(Pamiętaj użyć [] dla [tekstu] i {} dla
+                    {nagłówka}):</label>
+                <textarea name='post__all' id='post__all'></textarea>
+                <input multiple='multiple' class='post__images-upload' type='file' accept='image/*'
+                    id='post__images-upload' name='post__images-upload'>
+                <label class='btn btn-blue post__images-upload-label' for='post__images-upload'>Wybierz zdjęcia</label>
+                <div id="post__miniatures" class="post__miniatures"></div>
+                <button id='btn-save-gallery' class='btn btn-blue'>Zapisz</button>
+                <div class="post__image-save-status"></div>
+                <p class="post__save-status" id="save-status"></p>
+            </div>
+        </main>
+    </div>
+    <footer class='footer'>
+        <h6 class='footer__dev'>koło22@2021 - wykonanie Norbert B.</h6>
+    </footer>
+</body>
+
+</html>

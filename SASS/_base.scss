@@ -1,0 +1,64 @@
+:root {
+  //Variables
+  --color-yellow-first: #ffff00;
+  --color-yellow-dark: #969600;
+  --color-red-first: #ff0000;
+  --color-red-dark: #b10000;
+  --color-blue-dark: #140092;
+  --color-blue-light: #1e00e2;
+  --color-dark-green: #003700;
+  --color-medium-green: #009600;
+  --color-light-green: #00ba00;
+  --color-gray: #808080;
+  --color-gray-second: #333;
+  --color-gray-third: #575757;
+  --color-gray-fourth: #2f4f4f;
+  --color-one: white;
+  --color-footer-bgn: #111313;
+  --color-dark-transparent: #000000ef;
+  --boxes-shadow: 0rem .5rem 1.5rem #0000002a;
+  --elements-shadow: 0rem .5rem 1.5rem #0000002a;
+  --logo-text-shadow: 0rem 1rem 3rem #00000065;
+  --gradient-top: linear-gradient(to right, #808080bb, #808080d0);
+  --arrows-gradient: #a9a9a929, transparent;
+}
+
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit;
+}
+
+body {
+  box-sizing: border-box;
+  font-family: "Open Sans", sans-serif;
+  font-weight: 400;
+  line-height: 1.7;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+//UTILITY CLASSES
+
+.order-0,
+.order-1 {
+    @media only screen and (min-width: 50em) {
+        flex: 1 1 40% !important;
+    }
+}
+
+
+.background--red {
+  background-color: var(--color-red-first);
+}
+
+//ANIMATIONS
+
+@keyframes spin {
+  0%   {transform: rotate(0deg);}
+  100% {transform: rotate(360deg);}
+}

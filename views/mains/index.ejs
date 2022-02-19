@@ -1,0 +1,26 @@
+<div class='central-container'>
+
+    <% if (descriptions.notice) { %>
+    <div class='notices'>
+        <article class='notices__item'>
+            <h3 class='notices__header'><%= descriptions.noticeTitle %></h3>
+            <div class='notices__information'><%- descriptions.noticeHtml %></div>
+        </article>
+    </div>
+    <% } %>
+
+    <div class='card-flex-container'>
+    <%data.forEach(post=>{%>
+        <% const ext = post.mainImage.slice(post.mainImage.lastIndexOf('.')); %>
+        <% const fName = post.mainImage.replace(ext, '-mini' + ext); %>
+        <div class='card card-all'>
+            <img src='img/gallery/<%=post._id%>/<%=fName%>' class='card__image' alt='Zdjęcie główne'>
+            <h1 class='card__title'><%=post.pName%></h1>
+            <span class='card__divider'>&nbsp;</span>
+            <p class='card__description'><%=post.pDscShort%></p>
+            <button onclick="location.href='/wpis/<%=post.dateSimplified%>/<%=post.href%>'" class='btn btn-green btn-green-card' type='button'>Czytaj więcej</button>
+        </div>
+    <%});%>
+    </div>
+    <button onclick="location.href='/wpisy'" class='btn btn-green btn-show-more'>Pokaż więcej wpisów</button>
+</div>

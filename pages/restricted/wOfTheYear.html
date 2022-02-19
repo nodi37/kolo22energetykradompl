@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang='pl'>
+
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <link rel='stylesheet' href='/css/style.min.css'>
+
+    <title>Admin Page - Strona Koła</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/favicon/site.webmanifest">
+
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js'></script>
+    <script src='/scripts/admin/preloaders.js'></script>
+    <script src='/scripts/admin/buttonhandlers.js'></script>
+    <script src='/scripts/admin/requests.js'></script>
+    <script src='/scripts/admin/otherFunctions.js'></script>
+    <script src='/scripts/admin/appendFunctions.js'></script>
+
+    <script>
+        $('document').ready(aotyPreloader);
+    </script>
+</head>
+
+<body class='body-admin'>
+    <header class='header'>
+        <div class='logo'>
+            <a href="/" class="logo__link">
+                <div class='logo__text--only'>Koło nr 22 Energetyk Radom - Panel</div>
+            </a>
+        </div>
+        <div class="logout">
+            <form action='/logout' method='get'>
+                <button type="submit" class="btn btn-red logout__btn">Wyloguj</button>
+            </form>
+        </div>
+    </header>
+
+    <div class='container-admin'>
+        <div class='sidebar-admin'>
+            <ul class='side-nav'>
+                <li class='side-nav__item'><a href='/admin/opisy' class='side-nav__link'>Opisy</a></li>
+                <li class='side-nav__item'><a href='/admin/galerie' class='side-nav__link'>Galerie</a></li>
+                <li class='side-nav__item'><a href='/admin/zawody' class='side-nav__link'>Zawody</a></li>
+                <li class='side-nav__item side-nav__item-active'><a href='/admin/wedkarzroku'
+                        class='side-nav__link'>Wędkarz roku</a></li>
+            </ul>
+        </div>
+        <main class='main-admin'>
+            <div class="aoty-admin">
+                <div class="aoty-year">
+                    <select id="change-year" class="aoty-year__item" name="year"></select>
+                    <button id="add-ranking" class="aoty-year__item">Dodaj rok rankingowy</button>
+                </div>
+                <div class="aoty-page-container">
+                    <div class="ranking">
+                        <table class="ranking__table ranking__inner-table-main"></table>
+                        <table class="ranking__table">
+                            <tr>
+                                <td><input id="aName" size="1" type="text" placeholder="Imię i nazwisko"></td>
+                                <td><input id="weight" size="1" type="text" placeholder="Waga"></td>
+                                <td><input id="points" size="1" type="text" placeholder="Punkty"></td>
+                                <td class="ranking__table-add-new-person">&plus;</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="aoty">
+                        <div class="aoty__img-container"></div>
+                        <p class="aoty__description">Tu pojawi się imię i nazwisko!</p>
+                        <label class='aoty__label' for='aoty__text'>Wpisz imię i naziwsko, wybierz zdjęcie i naciśnij
+                            zapisz aby zmienić.</label>
+                        <input class='aoty__text-input' type='text' accept='image/*' id='aoty__text' name='aoty__text'>
+                        <input class='post__images-upload' type='file' accept='image/*' id='aoty__images-upload'
+                            name='aoty__images-upload'>
+                        <label class='btn btn-blue post__images-upload-label' for='aoty__images-upload'>Wybierz
+                            zdjęcie:</label>
+                        <button id='btn-save-aoty' class='btn btn-blue'>Zapisz</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <footer class='footer'>
+        <h6 class='footer__dev'>koło22@2021 - wykonanie Norbert B.</h6>
+    </footer>
+</body>
+
+</html>

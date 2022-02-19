@@ -1,0 +1,51 @@
+<script>
+    $('document').ready(()=>{
+        $('#change-year').on('change', ()=>{window.location.href=`/wedkarzroku/${$('#change-year').val()}`});
+    });
+</script>
+
+<div class="wr-container">
+<% if (rankings.length>0) {%>
+    <label class="wr-container__label" for="change-year">Wybierz ranking:</label>
+    <select id="change-year" class="aoty-year__item wr-container__select" name="year">
+        <% rankings.forEach((ranking)=>{ %>
+             <option value="<%=ranking%>" <%= ranking==year?'selected':'' %>><%=ranking%></option>
+         <% }) %>
+     </select>
+    <div class="best-one">
+        <% const header = data.bestOneDsc?`Wędkarzem roku ${year} jest ${data.bestOneDsc}!`:`Tu pojawi się zdjęcie wędkarza roku ${year}` %>
+        <h1 class="best-one__header"><%=header%>!</h1>
+        <img class="best-one__image" src="/img/wedkarzroku/<%=data.bestOneImg%>" alt="Wędkarz roku!">
+    </div>
+    <div class="podium">
+        <h5 class="podium__inf">Najlepsi w tym roku:</h5>
+        <h1 class="podium__place podium__place--first"><%=data.firstPlace.aName%> z sumą punktów: <%=data.firstPlace.pointSum%>, oraz wagą: <%=data.firstPlace.weightSum%>g</h1>
+        <h2 class="podium__place podium__place--second"><%=data.secondPlace.aName%> z sumą punktów: <%=data.secondPlace.pointSum%>, oraz wagą: <%=data.secondPlace.weightSum%>g</h2>
+        <h3 class="podium__place podium__place--third"><%=data.thirdPlace.aName%> z sumą punktów: <%=data.thirdPlace.pointSum%>, oraz wagą: <%=data.thirdPlace.weightSum%>g</h3>
+    </div>
+    <div class="classification">
+        <h4 class="classification__header">Klasyfikacja na rok <%=year%></h4>
+        <div class="classification__table">
+            <div class="classification__table-header">
+                <p>Imię i naziwsko</p>
+                <p>Wyniki</p>
+                <p>Suma</p>
+            </div>
+            <% allPariticipants.forEach((one, index)=>{ %>
+            <div class="classification__table-row">
+                <p><%=one.aName%></p>
+                <div class="classification__table--inner">
+                    <%one.results.forEach(result=>{%>
+                    <div class="classification__table--inner-row"><p><%=result[1]%>pkt</p><p><%=result[0]%>g</p></div>
+                    <%});%>
+                    </div>
+                <div class="classification__table--inner">
+                    <div class="classification__table--inner-row"><p><%=one.pointSum%>pkt</p><p><%=one.weightSum%>g</p></div>
+                </div>
+            </div>
+            <%})%>
+        </div>
+    </div>
+    <% } %>
+</div>
+

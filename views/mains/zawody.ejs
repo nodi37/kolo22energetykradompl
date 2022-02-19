@@ -1,0 +1,15 @@
+<div class="competition-table">
+    <% data.forEach((document,index)=>{ %>
+        <div class="competition-box">
+            <div class="competition-box__baner">
+                <h2 class="competition-box__title"><%= document.titleValue %></h2>
+                <h2 class="competition-box__date"><%= document.dateValue.toLocaleDateString('pl-PL', {day: "2-digit",month: "2-digit",year: "numeric"}) %></h2>
+            </div>
+            <div class="competition-box__expand">
+                <input type="checkbox" class="competition-box__checkbox" name="competition-box__checkbox" id="competition-box__checkbox-<%=index%>">
+                <p class="competition-box__description"><%= document.descValue %></p>
+                <label class="competition-box__label" for="competition-box__checkbox-<%=index%>">Naciśnij aby rozwinąć <span class="competition-box__sign">&vee;</span></label>
+            </div>
+        </div>      
+<% }); %>
+</div>

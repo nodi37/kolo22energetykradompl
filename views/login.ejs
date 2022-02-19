@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang='pl'>
+
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <link rel='stylesheet' href='/css/style.min.css'>
+
+    <title>Koło wędkarskie nr.22 Energetyk Radom</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/favicon/site.webmanifest">
+
+</head>
+
+<body class='body-login'>
+    <header class='header'>
+        <div class='logo'>
+            <a href="/" class="logo__link">
+                <div class='logo__text--only'>Koło nr 22 Energetyk Radom - Login</div>
+            </a>
+        </div>
+    </header>
+    <main class='main-login'>
+
+        <div class='login'>
+            <form class='login__form' id='login__form' action='/cpanel' method='post'>
+                <label class='login__label' for='email'>Nazwa użytkownika:</label>
+                <input class='login__input' type='text' name='email' id='email' required>
+                <label class='login__label' for='password'>Hasło:</label>
+                <input class='login__input' type='password' name='password' id='password' required>
+                <button type='submit' class='btn btn-green'>Zaloguj</button>
+            </form>
+            <% var style = ''%>
+            <% error?style='visibility: visible;':'' %>
+            <div class='login__errmsg' id='errmsg' style="<%= style %>"><p><%= error %></p></div>
+        </div>
+
+    </main>
+
+    <footer class='footer'>
+        <h6 class='footer__dev'>koło22@2021 - wykonanie Norbert B.</h6>
+    </footer>
+</body>
+
+</html>

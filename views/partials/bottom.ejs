@@ -1,0 +1,15 @@
+<div class='summary'>
+    <div class="summary__left">
+        <h3 class="header-green">Nasi partnerzy</h3>
+        <div class='summary__logos'>
+            <% (logos) %>
+                    <% logos.forEach(logo => { %>
+                    <a href='<%=logo.href%>' class='summary__link' target='_blank'><img class='summary__logo' src='/img/logo/<%=logo._id + logo.ext%>' alt='Logo'></a>
+                    <% }); %>
+                </div>
+    </div>
+    <% if(descriptions.descriptionBottom.length>5){ %>
+        <div class='summary__right'><%- descriptions.descriptionBottomHtml %></div>
+    <% } %>
+</div>
+</main>

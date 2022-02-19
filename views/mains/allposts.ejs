@@ -1,0 +1,22 @@
+<script>
+    $(document).ready(() => {
+        allPostsPreloader();
+    });
+</script>
+
+<div class="container--all">
+    <div class="search-engine">
+        <form class="search-engine__main">
+            <input type="text" name="search-engine__input" class="search-engine__input" placeholder="Szukaj...">
+            <button type="submit" class="search-engine__btn">
+                <svg class="search-engine__svg">
+                    <use href="/svg/icons.svg#icon-search" />
+                </svg>
+            </button>
+        </form>
+        <p class="search-engine__inf"></p>
+    </div>
+
+    <div class='card-flex-container card-flex-container--all'></div>
+    <button id='btn-show-more' class='btn btn-green btn-show-more'>Pokaż więcej</button>
+</div>
