@@ -54,6 +54,9 @@ const gModel = mongoose.Schema({
     },
     imageList: {
         type: Array
+    },
+    pUserDate: {
+        type: Date
     }
 })
 
@@ -111,6 +114,29 @@ async function saveImage(req) {
         return { status: 500, answer: "Server error" };
     });
 };
+
+//DeleteImage
+async function deleteImage(data) {
+    return new Promise(async (resolve, reject) => {
+        const { galleryId, miniatureName } = data;
+        const imageName = miniatureName.replace('-mini','');
+        const galleryDir = `${dirName}/public/img/gallery/${galleryId}/`;
+        fs.unlinkSync(galleryDir+miniatureName, (err)=>reject(err));
+        fs.unlinkSync(galleryDir+imageName, (err)=>reject(err));
+        //This line under gives back gallery object before pulling image! 
+        const gallery = await Gallery.findOneAndUpdate({_id: galleryId}, { $pull: { imageList: imageName } }).catch(err=>{reject(err)});
+        if(gallery.imageList.length==1){
+            //Thats why in this if length ==1, if there was only one image in array and this function is triggered, here will be no images now!
+            changeVisibility(galleryId);
+        }
+        const result = { status: 200, answer: "Image deleted!" };
+        resolve(result);
+    }).catch(err => {
+        console.log("This shouldnt happen, check deleteImage func");
+        console.log(err);
+        return { status: 500, answer: "Server error" };
+    });
+}
 
 //CREATES THUMBNAILS FOR GALLERY IMAGES
 async function createthumbnail(img) {
@@ -205,7 +231,7 @@ async function updateGallery(data) {
         const id = data.galleryId;
         const href = _.kebabCase(data.pName).slice(0, 39);
         const pDscLongHtml = await generateHtml(data.pDscLong);
-        const toUpdate = { href, pName: data.pName, pDscShort: data.pDscShort, pDscLong: data.pDscLong, pDscLongHtml: pDscLongHtml, mainImage: data.mainImage };
+        const toUpdate = { ...data, href, pDscLongHtml: pDscLongHtml };
         Gallery.findOneAndUpdate({ _id: id }, toUpdate).then(() => {
             const result = { status: 200, answer: "Document succesfully updated" };
             resolve(result);
@@ -231,6 +257,7 @@ async function listAllGalleries() {
     });
 }
 
+//
 
 //DELETES COMPLETE GALLERY!
 async function deleteGallery(id) {
@@ -258,15 +285,33 @@ async function deleteGallery(id) {
 //MAKES GALLERY PUBLIC/UNPUBLIC
 async function changeVisibility(gId) {
     return new Promise(async (resolve, reject) => {
-        const doc = await Gallery.findOne({ _id: gId }).catch(err => { reject(err) })
+        const doc = await Gallery.findOne({ _id: gId }).catch(err => { reject(err) });
+        
         if (doc) {
+            var updateObj = {};
             const toSet = doc.public ? false : true;
-            Gallery.findOneAndUpdate({ _id: gId }, { "public": toSet }).then(() => {
+
+            if (toSet) {
+                if(doc.imageList.length > 0){
+                    const mainImage = !doc.mainImage ? doc.imageList[0] : doc.mainImage;
+                    updateObj = {
+                        "public": toSet,
+                        "mainImage": mainImage
+                    }
+                } else {
+                    reject("No images or other error!");
+                }
+            } else {
+                updateObj = {
+                    "public": toSet
+                }
+            }
+            Gallery.findOneAndUpdate({ _id: gId }, updateObj).then(() => {
                 const result = { status: 200, answer: `Gallery ${gId} visibility changed!` };
                 console.log(`Gallery ${gId} visibility changed!`);
                 resolve(result);
             }).catch(err => { reject(err) });
-        }
+        } 
     }).catch(err => {
         console.log("This shouldnt happen, check changeVisibility function");
         console.log(err);
@@ -314,7 +359,7 @@ async function getPublic(data) {
             }
             ]
         }
-        Gallery.find(query).sort({ '_id': -1 }).skip(data.postsLoaded).limit(data.toLoad).then(documents => {
+        Gallery.find(query).sort({ "pUserDate": -1 }).skip(data.postsLoaded).limit(data.toLoad).then(documents => {
             const result = { status: 200, answer: documents };
             resolve(result);
         }).catch(err => reject(err));
@@ -348,6 +393,7 @@ async function getSinglePost(data) {
 
 module.exports = {
     saveImage,
+    deleteImage,
     listLogos,
     deleteLogo,
     createGallery,

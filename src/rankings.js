@@ -82,7 +82,7 @@ async function listRankings() {
 //TO BUILD
 async function updateRanking(data) {
     return new Promise(async (resolve, reject) => {
-        const { year, participantId, resultIndex, aName, weight, points, func } = data;
+        const { year, participantId, resultIndex, aName, weight, points, compDate, func } = data;
         const toDo = parseInt(func, 10);
         const result = { status: 200, answer: "Participant patched succesfully" };
 
@@ -91,7 +91,7 @@ async function updateRanking(data) {
                 const participant = {
                     participantId: _.kebabCase(aName),
                     aName: aName,
-                    results: [[weight, points]],
+                    results: [[weight, points, compDate]],
                     weightSum: parseInt(weight),
                     pointSum: parseInt(points)
                 }
@@ -100,11 +100,11 @@ async function updateRanking(data) {
                 break;
 
             case 1:
-                if (!data.weight || !data.points) {
+                if (!weight || !points || !compDate) {
                     reject("Data not valid when adding new user results! Case 1, switch statement in updateRanking func!");
                 } else {
                     const docToManage = await prepareParticipantUpdate(year, participantId);
-                    const toPush = [data.weight, data.points];
+                    const toPush = [weight, points, compDate];
                     const arr = docToManage.results;
                     arr.push(toPush);
                     recalcSums(docToManage);

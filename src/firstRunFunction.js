@@ -15,18 +15,31 @@ const {
     readDescriptions
 } = require('./descriptions');
 
+const {
+    createCounter,
+    incVisitorCount,
+    getVisitorCount
+} = require('./visitscounter')
+
 
 const User = mongoose.model("User");
 const Description = mongoose.model("Description");
+const Counter = mongoose.model("Counter");
 
 module.exports = async () => {
     const users = await User.find();
     const description = await Description.find();
+    const counter = await Counter.find();
     const dirs = [`${dirName}/public/img/gallery`, `${dirName}/public/img/logo`, `${dirName}/public/img/wedkarzroku`, `${dirName}/tmp/img`];
 
     if (users.length < 1) {
         console.log("First run! Registering new user!");
         register(process.env.KOLO22USER, process.env.KOLO22PASSWORD);
+    }
+
+    if (counter.length < 1) {
+        console.log("No counter! Creating!");
+        createCounter();
     }
 
     if (description.length < 1) {

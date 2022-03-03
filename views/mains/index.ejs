@@ -9,14 +9,18 @@
     </div>
     <% } %>
 
-    <div class='card-flex-container'>
+    <div class='card-flex-container card-flex-container--reverse-order'>
     <%data.forEach(post=>{%>
         <% const ext = post.mainImage.slice(post.mainImage.lastIndexOf('.')); %>
         <% const fName = post.mainImage.replace(ext, '-mini' + ext); %>
-        <div class='card card-all'>
+        <% const userDateObj = new Date(post.pUserDate); %>
+        <% const userDate = userDateObj.toLocaleDateString('pl', { day: "numeric", month: "long", year: "numeric" }); %>
+
+        <div class='card'>
             <img src='img/gallery/<%=post._id%>/<%=fName%>' class='card__image' alt='Zdjęcie główne'>
             <h1 class='card__title'><%=post.pName%></h1>
             <span class='card__divider'>&nbsp;</span>
+            <p class='card__description card__date'><%=userDate%></p>
             <p class='card__description'><%=post.pDscShort%></p>
             <button onclick="location.href='/wpis/<%=post.dateSimplified%>/<%=post.href%>'" class='btn btn-green btn-green-card' type='button'>Czytaj więcej</button>
         </div>

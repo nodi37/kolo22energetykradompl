@@ -56,9 +56,10 @@ const postCreateSchema = {
         "pName": { type: "string" },
         "pDscShort": { type: "string" },
         "pDscLong": { type: "string" },
-        "mainImage": { type: "string" }
+        "mainImage": { type: "string" },
+        "pUserDate": { type: "string" }
     },
-    required: ["pName"],
+    required: ["pName", "pUserDate"],
     additionalProperties: false
 }
 
@@ -73,6 +74,15 @@ const imageUploadSchema = {
     additionalProperties: false
 }
 
+const imageDeleteSchema = {
+    type: "object",
+    properties: {
+        "galleryId": { type: "string" },
+        "miniatureName": { type: "string" }
+    },
+    required: ["galleryId", "miniatureName"],
+    additionalProperties: false
+}
 
 const loginSchema = {
     type: "object",
@@ -116,17 +126,17 @@ const publicPostsSchema = {
     required: ["query", "postsLoaded", "toLoad"],
     additionalProperties: false
 }
-const singlePostSchema = {
-    type: "object",
-    properties: {
-        "year": { type: "string" },
-        "month": { type: "string" },
-        "day": { type: "string" },
-        "href": { type: "string" }
-    },
-    required: ["year", "month", "day", "href"],
-    additionalProperties: false
-}
+// const singlePostSchema = {
+//     type: "object",
+//     properties: {
+//         "year": { type: "string" },
+//         "month": { type: "string" },
+//         "day": { type: "string" },
+//         "href": { type: "string" }
+//     },
+//     required: ["year", "month", "day", "href"],
+//     additionalProperties: false
+// }
 
 const createRankingSchema = {
     type: "object",
@@ -146,6 +156,7 @@ patchRankingSchema = {
         "aName": { type: "string" },
         "weight": { type: "string" },
         "points": { type: "string" },
+        "compDate": { type: "string" },
         "func": { type: "string" }
     },
     additionalProperties: false
@@ -165,9 +176,10 @@ module.exports = {
     logoDeleteSchema,
     postCreateSchema,
     imageUploadSchema,
+    imageDeleteSchema,
     loginSchema,
     saveDescriptionsSchema,
     changeVisibilitySchema,
     publicPostsSchema,
-    singlePostSchema
+    //singlePostSchema
 }

@@ -113,6 +113,19 @@ function sendImage(data) {
     });
 }
 
+//Gallery image remover
+function deleteImageReq(miniature) {
+    $.ajax({
+        url: '/api/image',
+        type: 'DELETE',
+        data: miniature
+    }).done((res) => {
+        done(res);
+    }).fail((res) => {
+        fail(res);
+    });
+}
+
 //COMPETITION
 function createNewCompetitionReq(data) {
         $.ajax({

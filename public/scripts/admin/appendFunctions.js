@@ -24,7 +24,7 @@ function appendGallery(doc) {
     var ext = '';
     var fName = '';
 
-    if(doc.mainImage){
+    if (doc.mainImage) {
         ext = doc.mainImage.slice(doc.mainImage.lastIndexOf('.'));
         fName = doc.mainImage.replace(ext, '-mini' + ext);
     } else {
@@ -47,27 +47,16 @@ function appendGallery(doc) {
 
 //APPENDS MINIATURES AFTER UPLOAD/ON LOAD
 function appendMiniatures(data) {
-    const { status, thumb, imgCount, counter } = data;
+    const { status, thumb, counter } = data;
     if (status == 200) {
-        $(`<div class="post__miniature"><img src="/img/gallery/${galleryId}/${thumb}" alt="Miniature" class="post__miniature-img"></div>`).appendTo('#post__miniatures');
-        $('.post__miniature').on('click', miniatureClickHandler);
-        if (counter == 1 & !$('.post__miniature--active')[0]) {
-            $('.post__miniature').addClass('post__miniature--active');
-        }
-        if (counter == imgCount) {
-            $("#save-status").text(`Zapisano!`);
-            $("#save-status").css('background-color', 'var(--color-dark-green)');
-            $("#post__images-upload").val(null);
-            $(".post__images-upload-label").text(`Wybierz zdjęcia`);
-            updateGallery();
-        } else {
-            $("#save-status").text(`Zapisuje zdjęcia: ${counter}/${imgCount}...`);
-        }
+        $(`<div class="post__miniature"><img src="/img/gallery/${galleryId}/${thumb}" alt="Miniature" class="post__miniature-img"><span class='post__miniature-delete-button' data-gallery-id=${galleryId} data-miniature-name=${thumb}>&times;</span></div>`).appendTo('#post__miniatures');
     } else {
         $("#save-status").text(`Wystąpił błąd!`);
         $("#save-status").css('background-color', 'var(--color-red-dark)');
     }
 }
+
+
 
 //JUST APPEND LOGOS ON PAGE LOAD
 function appendLogos(element) {
@@ -102,19 +91,30 @@ async function appendBestOne(data) {
 //Appends ranking year
 async function appendRankingTable(year) {
     const tableData = await getTableReq(year);
+    const competitions = await getCompetitions();
+    const competitionsArray = []; //Array for competitions dates
     appendBestOne({ img: tableData.bestOneImg, dsc: tableData.bestOneDsc });
+
+    competitions.forEach((comp, i) => { //Pushes competitions to array and appends options for new angler form.
+        const dateValue = comp.dateValue;
+        const toAppend = dateValue.slice(0, dateValue.indexOf('T'));
+        $(`<option value="${toAppend}" default>${toAppend}</option>`).appendTo(`#user-competiton-select-new`);
+        competitionsArray.push(toAppend);
+    });
+
     $(`
     <tr>
     <th>Lp.</th>
     <th>Imię i naziwsko</th>
     <th>Wyniki</th>
-    <th>Suma</th>
+    <th>Dodaj</th>
     </tr>
     `).appendTo('.ranking__inner-table-main');
 
-
-    tableData.allPariticipants.forEach(async (part, index) => {
+    tableData.allPariticipants.forEach(async (part, index) => { //This is for every user!
         const { aName, participantId, pointSum, results, weightSum } = part;
+        const compToAppend = [...competitionsArray]; //Makes temp copy of competitions array for every participant.
+        //Appends participant to table.
         $(`
             <tr>
             <td>${index + 1}</td>
@@ -123,26 +123,28 @@ async function appendRankingTable(year) {
                 <table class="ranking__inner-table ranking__inner-table-${index}"></table>
             </td>
             <td>
-                <table class="ranking__inner-table">
-                    <tr>
-                        <td>${weightSum}g</td>
-                        <td>${pointSum}</td>
-                    </tr>
-                </table>
+                <select name="user-competiton" class="ranking__competition-select" id="user-competiton-select-${participantId}">
+                    <option value="" default>&nbsp;</option>
+                </select>
             </td>
             <td data-id="${participantId}" class="ranking__table-add">&plus;</td>
-        </tr>`).appendTo('.ranking__inner-table-main');
-
-        results.forEach((result, i) => {
+        </tr>`).appendTo('.ranking__inner-table-main'); 
+        //Appends participant results to user row in table and removes used competition dates from temp >compToAppend< array. 
+        results.forEach((result, i) => { 
             $(`                    
             <tr>
             <td>${result[0]}g</td>
-            <td>${result[1]}</td>
+            <td>${result[1]}pkt</td>
+            <td>${result[2]}</td>
             <td data-id="${participantId}" data-result-index=${i} class="ranking__table-delete">&times;</td>
             </tr>`).appendTo(`.ranking__inner-table-${index}`);
+            compToAppend.splice(compToAppend.indexOf(result[2]), 1);
+        });
+        //Appends remaining dates to select input for user
+        compToAppend.forEach(el => {
+            $(`<option value="${el}" default>${el}</option>`).appendTo(`#user-competiton-select-${participantId}`);
         });
     });
-
     $('.ranking__table-delete').on('click', deletePersonResult);
     $('.ranking__table-add').on('click', addNewPersonalResultHandler);
 }

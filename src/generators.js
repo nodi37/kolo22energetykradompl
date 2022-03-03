@@ -26,9 +26,9 @@ function fail2banTimestamp() {
 }
 
 function findBesttResults(a, b) {
-    if (a.pointSum < b.pointSum) {
+    if (a.pointSum > b.pointSum) {
         return -1;
-    } else if (a == b) {
+    } else if (a.pointSum == b.pointSum) {
         if (a.weightSum < b.weightSum) {
             return -1;
         }

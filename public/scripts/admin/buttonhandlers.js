@@ -29,16 +29,18 @@ function saveBestAnglerHandler() {
 function addNewPersonalResultHandler(e) {
     const weight = prompt("Wpisz wagę:");
     const points = prompt("Wpisz ilość punktów:");
+    const cDate = $(`#user-competiton-select-${e.target.dataset.id}`)[0].value;
     const data = {
         year: $('#change-year').children("option:selected").val(),
         participantId: e.target.dataset.id,
         weight: weight,
         points: points,
+        compDate: cDate,
         func: 1
     }
 
-    if (!weight || !points) {
-        alert("Wprowadzone dane są nieprawidłowe! Wprowadź obydwie wartości.")
+    if (!weight || !points || cDate.length<1) {
+        alert("Wprowadzone dane są nieprawidłowe! Wprowadź wagę, ilość punktów oraz wybierz datę zawodów.")
     } else {
         rankingPatchReq(data);
     }
@@ -59,11 +61,13 @@ function deletePersonResult(e) {
 async function addNewPersonHandler() {
     var dataValid = 1;
     const year = $('#change-year').children("option:selected").val();
+    const cDate = $(`#user-competiton-select-new`)[0].value;
     const data = {
         year: year,
         aName: $('#aName').val(),
         weight: $('#weight').val(),
         points: $('#points').val(),
+        compDate: cDate,
         func: 0
     }
 
@@ -75,7 +79,7 @@ async function addNewPersonHandler() {
                 dataValid = 0;
             }
         })
-        dataValid?rankingPatchReq(data):alert('Uzupełnij Nazwę punkty oraz wagę!');
+        dataValid?rankingPatchReq(data):alert('Uzupełnij wszystkie pola!');
     }
 }
 
@@ -160,20 +164,34 @@ async function saveGalleryBtnHandler() {
     const pName = $('#post__name').val();
     const pDscShort = $('#post__description').val();
     const pDscLong = $('#post__all').val();
-    const data = { pName: pName, pDscShort: pDscShort, pDscLong: pDscLong };
-    if (!pName) {
-        alert("Uzupełnij nazwę wpisu!")
+    const pUserDate = $('#post__date').val();
+    const data = { pName: pName, pDscShort: pDscShort, pDscLong: pDscLong, pUserDate: pUserDate };
+    $("#save-status").css(`background-color`, 'var(--color-yellow-dark)');
+    $("#save-status").text(`Zapisuję galerię!`);
+    if (!pName || !pUserDate) {
+        alert("Uzupełnij datę oraz nazwę wpisu!");
     } else if (isGalleryLoaded) {
         await sendImages();
+        await updateGallery();
     } else {
         await saveGallery(data);
     }
+    $("#save-status").text(`Zapisano!`);
+    $("#save-status").css('background-color', 'var(--color-dark-green)');
 }
 
 //Marks main miniature
 function miniatureClickHandler(e) {
     $('.post__miniature').removeClass('post__miniature--active');
     $(e.currentTarget).addClass('post__miniature--active');
+}
+
+//Deletes image from gallery
+function miniatureDeleteHandler(e) {
+    e.stopPropagation();
+    if(confirm('Na pewno chcesz usunąć to zdjęcie?')) {
+        deleteImageReq(e.currentTarget.dataset)
+    }
 }
 
 //Gallery buttons functions

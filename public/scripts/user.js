@@ -110,7 +110,7 @@ function addLoader() {
     appendSpinner();
 }
 
-function removeLoader(){
+function removeLoader() {
     $('.loader').remove();
 }
 
@@ -197,16 +197,22 @@ function appendSpinner() {
 
 //APPENDS POST CARD
 function appendPost(post, index) {
-    const { __v, _id, dateSimplified, href, imageList, mainImage, pDscLong, pDscShort, pName, public } = post;
-    const classes = allPostsPage ? 'card--all' : `order-${index}`
+    const { __v, _id, dateSimplified, href, imageList, mainImage, pDscLong, pDscShort, pName, pUserDate, public } = post;
     const ext = mainImage.slice(mainImage.lastIndexOf('.'));
     const fName = mainImage.replace(ext, '-mini' + ext);
+    const userDateObj = new Date(pUserDate);
+    const userDate = userDateObj.toLocaleDateString('pl', {
+        day: "numeric",
+        month: "long",
+        year: "numeric"
+    });
 
     $(`
-    <div class='card ${classes}'>
+    <div class='card'> 
         <img src='img/gallery/${_id}/${fName}' class='card__image' alt='Zdjęcie główne'>
         <h1 class='card__title'>${pName}</h1>
         <span class='card__divider'>&nbsp;</span>
+        <p class='card__description card__date'>${userDate}</p>
         <p class='card__description'>${pDscShort}</p>
         <button onclick="location.href='/wpis/${dateSimplified}/${href}'" class='btn btn-green btn-green-card' type='button'>Czytaj więcej</button>
     </div>

@@ -42,11 +42,12 @@ const {
     logoDeleteSchema,
     postCreateSchema,
     imageUploadSchema,
+    imageDeleteSchema,
     loginSchema,
     saveDescriptionsSchema,
     changeVisibilitySchema,
-    publicPostsSchema,
-    singlePostSchema
+    publicPostsSchema
+    //singlePostSchema
 } = require('./src/validationSchemes');
 
 const {
@@ -63,6 +64,7 @@ const {
 
 const {
     saveImage,
+    deleteImage,
     listLogos,
     deleteLogo,
     createGallery,
@@ -96,6 +98,12 @@ const {
     findBesttResults,
     scaleImage
 } = require('./src/generators');
+
+const {
+    createCounter,
+    incVisitorCount,
+    getVisitorCount
+} = require('./src/visitscounter')
 
 const firstRun = require('./src/firstRunFunction');
 
@@ -192,7 +200,7 @@ app.get('/wedkarzroku/:year', async (req, res) => {
 
         await rankings.answer.forEach(async ranking => {
             const check = await getSpecifiedRanking(ranking);
-            if (check.answer.allPariticipants.length > 1) {
+            if (check.answer.allPariticipants.length > 0) {
                 rankingsArr.push(ranking);
             }
         });
@@ -218,8 +226,14 @@ app.get('/wedkarzroku/:year', async (req, res) => {
 app.get('/', async (req, res) => {
     const data = await getPublic({ query: '', postsLoaded: 0, toLoad: 5 });
     const reqData = await loadRequiredData();
+
+    if(!req.cookies.AlreadyVisited){
+        res.cookie('AlreadyVisited', true, {expires: new Date(Date.now()+9999999999999), path: '/'});
+        incVisitorCount();
+    } 
+
     res.render(__dirname + '/views/index.ejs', {
-        data: data.answer,
+        data: data.answer.reverse(),
         ...reqData
     });
 });
@@ -249,9 +263,13 @@ app.get('/wpisy', async (req, res) => {
 ////HTML FILES
 
 app.get('/cpanel', (req, res) => {
-    res.render(__dirname + '/views/login.ejs', {
-        error: ''
-    });
+    if (req.signedCookies.Authorization) {
+        res.redirect('/admin/opisy');
+    } else {
+        res.render(__dirname + '/views/login.ejs', {
+            error: ''
+        });
+    }
 });
 
 app.get('/logout', (req, res) => {
@@ -424,6 +442,17 @@ app.post('/api/image', verifyToken, upload.single('image'), async (req, res) => 
     }
 });
 
+//DELETE TO DELETE IMAGES IN GALLERY
+app.delete('/api/image', verifyToken, async (req,res)=>{
+    if (ajv.validate(imageDeleteSchema, req.body)) {
+        const { status, answer } = await deleteImage(req.body);
+        res.status(status).json({ answer: answer });
+    } else {
+        failResponse(res);
+    }
+});
+
+
 //DELETE TO DELETE LOGO
 app.delete('/api/logos', verifyToken, upload.single('image'), async (req, res) => {
     if (ajv.validate(logoDeleteSchema, req.body)) {
@@ -495,7 +524,8 @@ app.get('/api/galleries', verifyToken, async (req, res) => {
 async function loadRequiredData() {
     const logos = await listLogos();
     const descriptions = await readDescriptions();
-    return { logos: logos.answer, descriptions: descriptions.answer };
+    const counter = await getVisitorCount();
+    return { logos: logos.answer, descriptions: descriptions.answer, visitsCount: counter };
 }
 
 //Fail response function 

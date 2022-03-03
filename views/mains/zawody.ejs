@@ -1,6 +1,6 @@
 <div class="competition-table">
     <% data.forEach((document,index)=>{ %>
-        <div class="competition-box">
+        <div class="competition-box <%= document.dateValue.getTime()<new Date().getTime()?'competition-box--expired':'' %>">
             <div class="competition-box__baner">
                 <h2 class="competition-box__title"><%= document.titleValue %></h2>
                 <h2 class="competition-box__date"><%= document.dateValue.toLocaleDateString('pl-PL', {day: "2-digit",month: "2-digit",year: "numeric"}) %></h2>
